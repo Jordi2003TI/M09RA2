@@ -2,55 +2,52 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Motor extends Thread {
+    private int id;
     private int potenciaActual;
     private int potenciaObjetivo;
 
-    public Motor(){
+    public Motor(int id){
+        this.id = id;
         this.potenciaActual = 0;
-        this.potenciaObjetivo = 0;
+        this.potenciaObjetivo = -1;
     }
+
     public void setPotencia(int p){
         this.potenciaObjetivo = p;
-    }
+   }
+
     @Override
     public void run(){
         while(true){
+            try{
+                if(potenciaActual == potenciaObjetivo){
+                    Thread.sleep(200);
+                    if(potenciaObjetivo == 0){
+                        break;
+                    }else{
+                        Thread.sleep(1000);
+                    }
+                }else{
+                    int aleatorio = (int) (Math.random() * 1001) + 1000;
+                    Thread.sleep(aleatorio);
 
-            if(potenciaActual == 0){
-                break;
+                    if(potenciaActual < potenciaObjetivo){
+                        potenciaActual++;
+                        System.out.println("Motor" + id + " Incre. " + "Objetivo: " + potenciaObjetivo + " Actual: " + potenciaActual);
+                    }
+                    if(potenciaActual > potenciaObjetivo){
+                        potenciaActual--;
+                        System.out.println("Motor" + id + " Decre. " + "Objetivo: " + potenciaObjetivo + " Actual: " + potenciaActual);
+                    }
+                    if(potenciaActual == potenciaObjetivo){
+                        System.out.println("Motor" + id + " FerRes. " + "Objetivo: " + potenciaObjetivo + " Actual: " + potenciaActual);
+                    }
+                }
+                
+            }catch(Exception e){
+                e.printStackTrace();
             }
-            if(potenciaActual <= potenciaObjetivo){
-                potenciaActual++;
-            }
-            if(potenciaActual > potenciaObjetivo){
-                potenciaActual--;
-            }
-
         }
     }
-
-    public static void main(String[] args){
-        Motor motor1 = new Motor();
-        Motor motor2 = new Motor();
-        Motor motor3 = new Motor();
-        Motor motor4 = new Motor();
-        while(true){
-            System.out.println("Cual es la potencia Objetivo");
-            Scanner sc = new Scanner(System.in);
-            int numero = sc.nextInt();
-            if(numero == 0){
-                break;
-            }
-
-            motor1.setPotencia(numero);
-            motor2.setPotencia(numero);
-            motor3.setPotencia(numero);
-            motor4.setPotencia(numero);
-
-            motor1.start();
-            motor2.start();
-            motor3.start();
-            motor4.start();
-        }
-    }
+    
 }

@@ -5,11 +5,12 @@ public class Motor extends Thread {
     private int id;
     private int potenciaActual;
     private int potenciaObjetivo;
+    boolean esDiferente = false;
 
     public Motor(int id){
         this.id = id;
         this.potenciaActual = 0;
-        this.potenciaObjetivo = -1;
+        this.potenciaObjetivo = 0;
     }
 
     public void setPotencia(int p){
@@ -22,7 +23,7 @@ public class Motor extends Thread {
             try{
                 if(potenciaActual == potenciaObjetivo){
                     Thread.sleep(200);
-                    if(potenciaObjetivo == 0){
+                    if(potenciaObjetivo == 0 && esDiferente){
                         break;
                     }else{
                         Thread.sleep(1000);
@@ -41,6 +42,10 @@ public class Motor extends Thread {
                     }
                     if(potenciaActual == potenciaObjetivo){
                         System.out.println("Motor" + id + " FerRes. " + "Objetivo: " + potenciaObjetivo + " Actual: " + potenciaActual);
+                    }
+
+                    if(potenciaObjetivo > 0){
+                        esDiferente = true;
                     }
                 }
                 

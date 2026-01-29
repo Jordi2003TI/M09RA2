@@ -1,0 +1,43 @@
+pregunta numero 1
+    Perque s'atura la execucio al cap d'un temps?
+        La ejecucion se queda bloqueda debido a un estado de espera indefinido. Esto sucede por la combinacion de 3 cosas
+            -Cpacidad Limitada: El evento solo tiene 5 plazas, pero hay 10 asistentes intentado entrar
+            -Condicion de espera: Cuando un asistente intenta reservar y no hay sitio, se queda en wait
+            - Ciclo de bloque: Con el tiempo, puede darse el caso que los 5 asistentes que tienen reserva intenten hacer una segunda reserva(debido al 50%)
+                Al no tener sitio tambien entran en el wait. Si todos los hilos terminaran esperando para una plazas
+                y nadie ejecuta un canclearReserva, no se llama notify() y el programa deja de avanzar para siempre
+pregunta numero 2
+    Què passaria si en lloc de una probabilitat de 50%-%50 fora de 70%(ferReserva)-30%(cancelar)?
+    I si foren al revés les probabilitats? -> Mostra la porció de codi modificada i la sortida resultant en cada un dels 2 casos
+
+        70%
+        double prob = random.nextDouble();
+            try {
+                while (true) {
+                    if(prob < 0.70){ // aqui hacemos un 70% de posibilidades de que ocurra una de las dos opciones a haces reserva o cancelas
+                        esdeveniment.ferReserva(this); // mandamos la propia instancia nuestra
+                    }else {
+                        esdeveniment.cancelarReserva(this);
+                    }
+        En este caso el evento se llenara mucho mas rapido debido a que subimos el % para adquerir esa plaza. 
+        Ademas de esto se vera en la cmd asistens-x esperando y el blqueo total del prgra,a ocurria mucho antes que en el caso original 
+        
+        30%
+        double prob = random.nextDouble();
+            try {
+                while (true) {
+                    if(prob < 0.30){ // aqui hacemos un 30% de posibilidades de que ocurra una de las dos opciones a haces reserva o cancelas
+                        esdeveniment.ferReserva(this); // mandamos la propia instancia nuestra
+                    }else {
+                        esdeveniment.cancelarReserva(this);
+                    }
+        En este caso el programa ser mucho mas fluido y dificilmete de bloquear. 
+        La mayoria de las veces los asistentes estaran liberando plazas o intentando cancelarlas. 
+        Siempre suele haber huecos libres, porque los hilos casi nunca llegan a entrar en el estado de wait
+
+Pregunta numero 3
+    Perquè creus que fa falta la llista i no valdria només amb una variable sencera de reserves?
+        Un solo int de plazas disponibles no seria suficietne por que el metodo cancelaReserva debe de comprobar si ese asistente realemte tiene una reserva.
+        Antes de de sumar un aplaza. Sin la lista no sabriamos quien esta dentro de ella. Ademas si solo usararamos un contador, un asistente que no tiene reserva 
+        podria llamar a cancelarReserva y el systema le creria. Aumentando las palzas disponibles por encima del max pemitido. La lista permite interactuar con la 
+        isntancia real del asistente lo que garantiza que cada reserva este vinculada a un hilo.

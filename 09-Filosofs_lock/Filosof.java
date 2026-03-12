@@ -24,7 +24,6 @@ public class Filosof extends Thread {
     public void agafarForquilles() {
         agafarForquillaEsquerra();
         agafarForquillaDreta();
-        // Un cop té les dues, mostrem el missatge
         System.out.printf("%s té forquilles esq(%d) dreta(%d)%n", 
             nom, forquillaEsquerra.getNum(), forquillaDreta.getNum());
     }

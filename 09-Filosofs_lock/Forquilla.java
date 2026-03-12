@@ -1,5 +1,5 @@
 import java.util.concurrent.locks.ReentrantLock;
-/*Clase de forquilla donde pondremos las varibles y metodos necesarios de la practica */
+
 public class Forquilla{
     private int numero;
     private ReentrantLock bloqueig;

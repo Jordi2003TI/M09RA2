@@ -14,16 +14,25 @@ public class Fumador extends Thread{
     }
 
     public void compraTabac(){
+        if(tabac != null){
+            return;
+        }
         System.out.println("Fumador " + id + " comprant tabac");
         this.tabac = estanc.venTabac();
     }
 
     public void compraPaper(){
+        if(paper != null){
+            return;
+        }
         System.out.println("Fumador " + id + " comprant paper");
         this.paper = estanc.venPaper();
     }
 
     public void compraLlumi(){
+        if(llumi != null){
+            return;
+        }
         System.out.println("Fumador " + id + " comprant llumi");
         this.llumi = estanc.venLlumi();
     }

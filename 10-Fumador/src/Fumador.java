@@ -33,6 +33,7 @@ public class Fumador extends Thread{
             try{
                 Random random = new Random();
                 int tiempoEspera = 500 + random.nextInt(1001); // entre 0,5 y 1 segundo
+                System.out.println("Fumador " + id + " fumant");
                 Thread.sleep(tiempoEspera);
                 fuamades++;
                 tabac = null;
@@ -60,6 +61,8 @@ public class Fumador extends Thread{
                 break;
             }
         }
+
+        System.out.println("Fumador " + id + " ha fumat 3 vegades");
     }
 
 

@@ -1,9 +1,12 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BanyUnisex {
+import javax.imageio.IIOException;
+
+public class BanyUnisex extends Thread{
     private final String BANY_BUIT = "BANY_BUIT";
     private final String BANY_AMB_HOMES = "BANY_AMB_HOMES";
     private final String BANY_AMB_DONES = "BANY_AMB_DONES";
@@ -14,7 +17,7 @@ public class BanyUnisex {
     private ReentrantLock lock = new ReentrantLock(true);
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
         BanyUnisex bany = new BanyUnisex(); // mismo baño para todos
         List<Home> homes = new ArrayList<>();
         List<Dona> dones = new ArrayList<>();
@@ -39,11 +42,20 @@ public class BanyUnisex {
         }
 
         for(Home h: homes){
-            h.join();
+            try{
+                h.join();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            
         }
         
         for(Dona d: dones){
-            d.join();
+            try{
+                d.join();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
 
@@ -51,34 +63,64 @@ public class BanyUnisex {
     }
 
     public void entraHome(String nom){
-        System.out.println(nom + "Vol entrar al bany");
-        if(capacidad.tryAcquire()){
+        while(true){
             lock.lock();
-            ocupats++;
-            System.out.println(nom + "entra en el bany. Ocupants: " + ocupats);
+            try{
+                if(estatActual.equals(BANY_BUIT) || estatActual.equals(BANY_AMB_HOMES)){
+                    if(capacidad.tryAcquire()){
+                        ocupats++;
+                        estatActual = BANY_AMB_HOMES;
+                        System.out.println("Home entra al bany. Ocupants: " + ocupats);
+                        return;
+                }
+            }
+            }finally{
+                lock.unlock();
+            }
         }
     }
 
     public void surtHome(String nom){
-        ocupats--;
-        System.out.println(nom + "surt del bany. Ocupants: " + ocupats);
-        capacidad.release();
-        lock.unlock();
+        try{
+            ocupats--;
+            capacidad.release();
+            if(estatActual.equals(BANY_AMB_HOMES) && ocupats <= 0){
+                estatActual = BANY_BUIT;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(nom + "ha acabat d'usar el bany");
     }
 
     public void entraDona(String nom){
-        System.out.println(nom + "Vol entrar al bany");
-        if(capacidad.tryAcquire()){
+        while(true){
             lock.lock();
-            ocupats++;
-            System.out.println(nom + "entra en el bany. Ocupants: " + ocupats);
+            try{
+                if(estatActual.equals(BANY_BUIT) || estatActual.equals(BANY_AMB_DONES)){
+                    if(capacidad.tryAcquire()){
+                        ocupats++;
+                        estatActual = BANY_AMB_DONES;
+                        System.out.println("Home entra al bany. Ocupants: " + ocupats);
+                        return;
+                }
+            }
+            }finally{
+                lock.unlock();
+            }
         }
     }
 
     public void surtDona(String nom){
-        ocupats--;
-        System.out.println(nom + "surt del bany. Ocupants: " + ocupats);
-        capacidad.release();
-        lock.unlock();
+        try{
+            ocupats--;
+            capacidad.release();
+            if(estatActual.equals(BANY_AMB_DONES) && ocupats <= 0){
+                estatActual = BANY_AMB_DONES;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println(nom + "ha acabat d'usar el bany");
     }
 }

@@ -11,6 +11,7 @@ public class Dona extends Thread{
     public void run(){
         try {
             // aqui deberiamos hacer que un dona use un baño y entre
+            System.out.println(nom + " vol entrar al bany");
             banyUnisex.entraDona(nom);
             ultilizaLavabo();
             banyUnisex.surtDona(nom);
@@ -21,7 +22,7 @@ public class Dona extends Thread{
 
     public void ultilizaLavabo(){
         try{
-            int timepo = (int)(Math.random() * 1000) + 1000; // con esto hacemos que duerma entre 1 a 2s
+            int timepo = (int)(Math.random() * 1000) + 2000; // con esto hacemos que duerma entre 1 a 2s
             Thread.sleep(timepo);
         }catch(Exception e){
             e.printStackTrace();

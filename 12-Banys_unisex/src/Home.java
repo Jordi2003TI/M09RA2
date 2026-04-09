@@ -12,6 +12,7 @@ public class Home extends Thread{
     public void run(){
         try {
             // aqui deberiamos hacer que un hombre use un baño y entre
+            System.out.println(nom + " vol entrar al bany");
             banyUnisex.entraHome(nom);
             ultilizaLavabo();
             banyUnisex.surtHome(nom);
@@ -24,7 +25,6 @@ public class Home extends Thread{
         try{
             int timepo = (int)(Math.random() * 1000) + 1000; // con esto hacemos que duerma entre 1 a 2s
             Thread.sleep(timepo);
-            System.out.println(nom + "ha acabat d'usar el bany");
         }catch(Exception e){
             e.printStackTrace();
         }
